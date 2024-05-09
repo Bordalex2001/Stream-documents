@@ -34,25 +34,41 @@ namespace TextFormattingApp
 
         private void BoldButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplyFormatting(FontWeights.Bold, null, null, null);
+            ApplyFormatting(fontWeight: FontWeights.Bold);
         }
 
         private void ItalicButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplyFormatting(null, FontStyles.Italic, null, null);
+            ApplyFormatting(fontStyle: FontStyles.Italic);
         }
 
         private void UnderlineButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplyFormatting(null, null, TextDecorations.Underline, null);
+            ApplyFormatting(textDecoration: TextDecorations.Underline);
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            ApplyFormatting(null, null, null, Brushes.Black);
+            ApplyFormatting(textColor: Brushes.Black);
         }
 
-        private void ApplyFormatting(FontWeight? fontWeight = null, FontStyle? fontStyle = null, TextDecorationCollection textDecoration = null, Brush textColor = null)
+        private void colorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (colorComboBox.SelectedItem is ColorItem colorItem)
+            {
+                ApplyFormatting(textColor: colorItem.ColorBrush);
+            }
+        }
+
+        private void fontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (fontSizeComboBox.SelectedItem is FontSizeConverter fontSize)
+            {
+                ApplyFormatting(fontSize: fontSize);
+            }
+        }
+
+        private void ApplyFormatting(FontWeight? fontWeight = null, FontStyle? fontStyle = null, TextDecorationCollection textDecoration = null, Brush textColor = null, FontSizeConverter fontSize = null)
         {
             int startIndex = int.Parse(startIndexTextBox.Text);
             int endIndex = int.Parse(endIndexTextBox.Text);
@@ -71,6 +87,8 @@ namespace TextFormattingApp
                     selectedRange.ApplyPropertyValue(Inline.TextDecorationsProperty, textDecoration);
                 if (textColor != null)
                     selectedRange.ApplyPropertyValue(TextElement.ForegroundProperty, textColor);
+                if (fontSize != null)
+                    selectedRange.ApplyPropertyValue(TextElement.FontSizeProperty, fontSize);
             }
         }
     }
